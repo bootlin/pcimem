@@ -1,0 +1,27 @@
+package "pcimem" 
+version "1.0"
+purpose  "PCI memory analysis tool."
+usage "pcimem [options]"
+
+description "Raw access to PCI resources"
+
+section "Direction option"
+
+option	"read"	r	"Read memory from PCI" flag on
+option	"write"	w	"Write from file to memory" flag off
+
+section "Transfer Option"
+
+option  "address"	a	"Access memory at <address> (Offset in BAR)" string required
+option  "size"		s	"Size to copy in bytes" string required
+option	"access-size"	S	"Access size for read/write [1/2/4/8]" int optional default="4"
+option	"file"		f	"File to use for read/write. If not specified, use stdout/stdin for read/write." string optional
+option	"verbose"	v	"Verbose mode" flag off
+
+section "Device Selection"
+
+option	"device"	d	"PCI device to use (device in /sys/bus/pci/devices/)" string required
+option	"resource"	R	"PCI resource to use [resourceX]" int required
+
+option  "dummy1"              -   "Avoid compilation error with Werror"                          int        optional       default="0"    hidden
+option  "dummy2"              -   "Avoid compilation error with Werror"                          flag        off            dependon="dummy1"   hidden
