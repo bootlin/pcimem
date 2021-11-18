@@ -1,4 +1,4 @@
-CFLAGS := -Wall -Werror
+CFLAGS := -Wall -Werror -Wextra
 
 all: pcimem
 

@@ -30,7 +30,7 @@ static int file_fd;
 static int verbose = 0;
 static int pci_resource_fd;
 
-static void usage_err(const char *path)
+static void usage_err()
 {
 	pcimem_cmdline_print_help();
 	exit(1);
@@ -60,9 +60,11 @@ static long long string_to_size(char *str, const char *name)
 		case 'G':
 		case 'g':
 			size *= 1024;
+			__attribute__ ((fallthrough));
 		case 'M':
 		case 'm':
 			size *= 1024;
+			__attribute__ ((fallthrough));
 		case 'K':
 		case 'k':
 			size *= 1024;
@@ -144,7 +146,7 @@ void pcimem_do_write()
 		}
 
 		ret = read(file_fd, &write_val, access_size);
-		if (ret != access_size) {
+		if (ret != (ssize_t) access_size) {
 			fprintf(stderr, "Fail to read data from file: %zd instead of %zd, %s\n", ret, access_size, strerror(errno));
 			break;
 		}
@@ -181,7 +183,6 @@ int main(int argc, char **argv)
 	struct pcimem_args_info args_info;
 	char pci_resource_file[1024];
 	bool use_standard_io = false;
-	off64_t target_addr = -1;
 	int direction = -1;
 	char *file = NULL;
 	struct stat st;
@@ -269,9 +270,9 @@ int main(int argc, char **argv)
 	}
 
 	if (direction == PCI_READ) {
-		pcimem_do_read(pci_resource_fd, target_addr, file_fd);
+		pcimem_do_read();
 	} else {
-		pcimem_do_write(pci_resource_fd, target_addr, file_fd);
+		pcimem_do_write();
 	}
 
 	close(file_fd);
