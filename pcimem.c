@@ -30,16 +30,16 @@ static int file_fd;
 static int verbose = 0;
 static int pci_resource_fd;
 
+enum {
+	PCI_READ = 0,
+	PCI_WRITE,
+};
+
 static void usage_err()
 {
 	pcimem_cmdline_print_help();
 	exit(1);
 }
-
-enum {
-	PCI_READ = 0,
-	PCI_WRITE,
-};
 
 static long long string_to_size(char *str, const char *name)
 {
@@ -77,7 +77,7 @@ static long long string_to_size(char *str, const char *name)
 }
 
 
-void pcimem_do_read()
+static void pcimem_do_read(void)
 {
 	void *mmap_base, *read_addr;
 	uint64_t read_val = 0;
@@ -124,7 +124,7 @@ void pcimem_do_read()
 	return;
 }
 
-void pcimem_do_write()
+static void pcimem_do_write(void)
 {
 	void *mmap_base, *write_addr;
 	uint64_t write_val = 0;
